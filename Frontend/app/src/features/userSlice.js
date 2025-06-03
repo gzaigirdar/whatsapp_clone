@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // seperate data for the store, that is handle by it's own reducers that updates it's state
-
+// object that holds initial states data
 const initialState = {
     status:"",
     error:"",
     user:{
         id:"",
-        name: "",
+        name: "gman",
         email:"",
         picture:"",
         status:"",
@@ -19,9 +19,11 @@ const initialState = {
 export const userSlice = createSlice({
     name: "user",
     initialState,
+
+    // log out reducers
     reducers:{
         logout:(state)=>{
-            state.status ="",
+            state.status ="";
             state.user= {
 
                 id:"",
@@ -36,6 +38,7 @@ export const userSlice = createSlice({
     }
 
 })
-
+// exporting logout reducer from user slice
 export const {logout} = userSlice.actions;
+// exporting user slice
 export default userSlice.reducer;
