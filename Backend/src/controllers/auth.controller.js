@@ -2,6 +2,7 @@
 import { createUser} from "../services/auth.services.js";
 import { generateToken,verifyToken } from "../services/token.services.js";
 import { signuser } from "../services/auth.services.js";
+import { finduser } from "../services/user.services.js";
 import createHttpError from "http-errors";
 
 // these functinos are used in the routes to perform actions such get data,register and other tasks,
@@ -81,8 +82,19 @@ export const refresh_token = async(req,res,next) =>{
         if(!refresh_token) throw createHttpError.Unauthorized("Please log in");
         const check = await verifyToken(refresh_token,
             process.env.REFRESH_TOKEN_SECRET);
-        console.log(check)
-        res.json(check)
+       
+        // use the user id from the jwt token to check if the user exist
+        const user = await finduser(check.userId)
+        
+        const accessToken = await generateToken({userID: user._id},
+            "1d",
+            process.env.ACCESS_TOKEN_SECRET);
+        res.json({
+            accessToken,
+            id: user._id,
+
+
+        })
 
 
 
