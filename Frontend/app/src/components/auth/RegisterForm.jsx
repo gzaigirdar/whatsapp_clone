@@ -1,6 +1,9 @@
 import {useForm} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers/yup';
+import { signupSchema } from '../../validation/Validation.js';
+import AuthInput from './AuthInput.jsx';
 function RegisterForm() {
-    const {register,handleSubmit,watch,formState: {errors}} = useForm();
+    const {register,handleSubmit,watch,formState: {errors}} = useForm({resolver: yupResolver(signupSchema)});
     const onSubmit = (data) => console.log(data); 
     console.log("values",watch());
     console.log("errors",errors)
@@ -16,8 +19,17 @@ function RegisterForm() {
                 </div>
                 {/* Form */}
                <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
-                <input type="test" {...register("name",{required:true})} />
+                <AuthInput name="name" type="text" PlaceHolder="Full name" register={register} error={errors?.name?.message}/>
+                <AuthInput name="email" type="text" PlaceHolder="Email" register={register} error={errors?.email?.message}/>
+                <AuthInput name="status" type="text" PlaceHolder="Status" register={register} error={errors?.status?.message}/>
+                <AuthInput name="password" type="text" PlaceHolder="Password" register={register} error={errors?.password?.message}/>
+           
+
+             
+                
+                
                 <button type='submit'> Submit </button>
+                
 
 
                </form>

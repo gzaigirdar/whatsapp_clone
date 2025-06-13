@@ -10,7 +10,9 @@ function Loginform() {
                     <p className="mt-4 text-sm text-white"> Sign in </p>
                 </div>
                 {/* Form */}
-               <form className="mt-6 space-y-6"></form>
+               <form className="mt-6 space-y-6">
+                
+               </form>
 
             </div>
           
