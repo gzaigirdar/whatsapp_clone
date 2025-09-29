@@ -6,7 +6,7 @@ import { finduser } from "../services/user.services.js";
 import createHttpError from "http-errors";
 
 // these functinos are used in the routes to perform actions such get data,register and other tasks,
-export const regeister = async(req,res,next) =>{
+export const register = async(req,res,next) =>{
     try{
         const {name,email,picture,status,password} = req.body;
         const user = await createUser(req.body);
@@ -19,11 +19,22 @@ export const regeister = async(req,res,next) =>{
         )
         res.cookie("refreshtoken",refreshToken,{
             httpOnly:true,
-            path:"http://localhost:9000/api/auth/refreshtoken"
+            path:"http://localhost:9000/api/auth/refreshtoken",
+            maxAge: 30*24*60*1000, //30 days
         })
         res.json({
             message:"success",
-            accessToken,
+            user:{
+                _id:user._id,
+                name:user.name,
+                email:user.email,
+                picture:user.picture,
+                status:user.status,
+                accessToken,
+
+    
+            },
+        
         });
         console.table({
             accessToken,
@@ -90,8 +101,17 @@ export const refresh_token = async(req,res,next) =>{
             "1d",
             process.env.ACCESS_TOKEN_SECRET);
         res.json({
-            accessToken,
-            id: user._id,
+            user:{
+                _id:user._id,
+                name:user.name,
+                email:user.email,
+                picture:user.picture,
+                status:user.status,
+                accessToken,
+
+    
+            }
+           
 
 
         })

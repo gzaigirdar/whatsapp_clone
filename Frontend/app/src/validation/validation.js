@@ -13,7 +13,7 @@ export const signupSchema = Yup.object({
   password: Yup.string()
   .required("please enter your password")
   .matches(
-    /^(?=(?:[^A-Za-z]*[A-Za-z]){4,})(?=.*\d)(?=(?:[^!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]){1,2}$)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]+$/,
+    /^(?=(?:.*[A-Za-z]){4,})(?=.*\d)(?=(?:.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]){1,2}).+$/,
     "Password must have at least 4 letters, at least 1 digit, and 1-2 special characters"
   )
 
