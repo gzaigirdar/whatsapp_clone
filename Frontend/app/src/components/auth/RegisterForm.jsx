@@ -6,18 +6,34 @@ import {useDispatch, useSelector} from 'react-redux'
 import {PacmanLoader} from 'react-spinners';
 import {Link, Navigate, useNavigate} from 'react-router-dom';
 import { registerUser } from '../../features/userSlice.js';
+import { useState } from 'react';
+import Picture from './Picture.jsx';
 function RegisterForm() {
     const {status,error} = useSelector((state) => state.user)
+    // use to redirect to another page
     const navigate = useNavigate()
+    
     const {register,handleSubmit,watch,formState: {errors}} = useForm({resolver: yupResolver(signupSchema)});
+    
     const dispatch = useDispatch()
+    const [picture,setPicture] = useState()
+    const [readableimage, setReadableimage] = useState('')
+    
+    
     const onSubmit = async (data) => {
+
+
+
        let res = await dispatch(registerUser({...data, picture: ""}))
-       if (res.meta.requestStatus === "fulfilled") {
+        if (res.meta.requestStatus === "fulfilled") {
         navigate("/");
       }
       
     }
+
+
+
+    
     console.log(status)
     return ( 
         <div className="h-screen w-full max-w-md flex items-center justify-center overflow-auto ">
@@ -35,6 +51,8 @@ function RegisterForm() {
                 <AuthInput name="email" type="email" PlaceHolder="Email" register={register} error={errors?.email?.message}/>
                 <AuthInput name="status" type="text" PlaceHolder="Status" register={register} error={errors?.status?.message}/>
                 <AuthInput name="password" type="pass" PlaceHolder="Password" register={register} error={errors?.password?.message}/>
+
+                <Picture  readablepicture={readableimage}  setReadableimage={setReadableimage} setPicture={setPicture}/>
            
 
               {

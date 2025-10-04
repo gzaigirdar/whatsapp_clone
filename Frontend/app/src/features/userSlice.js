@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
 
 const End_point = process.env.REACT_APP_API_ENDPOINT;
-
+// intial state for the slice
 const initialState = {
   status: "idle",
   error: null,
@@ -28,7 +28,7 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
-
+// user slice
 export const userSlice = createSlice({
   name: "user",
   initialState,
