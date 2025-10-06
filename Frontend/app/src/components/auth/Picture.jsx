@@ -41,7 +41,10 @@ function Picture({ readablepicture, setPicture, setReadableimage }) {
     }
   }
 
-  console.log(readablepicture);
+  function HandleChange(){
+    setReadableimage('')
+    setError('')
+  }
 
   return (
     <div className="mt-8 content-center dark:text">
@@ -54,6 +57,13 @@ function Picture({ readablepicture, setPicture, setReadableimage }) {
             src={readablepicture}
             alt="picture"
           />
+          {/* change image button */}
+          <div
+            className="mt-2 w-20 py-1 dark:bg-dark_bg_3 rounded-md text-xs font-bold flex items-center justify-center cursor-pointer"
+            onClick={() => HandleChange()}
+            >
+            Remove
+          </div>
         </div>
       ) : (
         <div
