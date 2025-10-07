@@ -5,13 +5,16 @@ import AuthInput from './AuthInput.jsx';
 import {useDispatch, useSelector} from 'react-redux'
 import {PacmanLoader} from 'react-spinners';
 import {Link, Navigate, useNavigate} from 'react-router-dom';
-import { registerUser } from '../../features/userSlice.js';
+import { changeStatus, registerUser } from '../../features/userSlice.js';
 import { useState } from 'react';
 import Picture from './Picture.jsx';
+import axios from 'axios';
 function RegisterForm() {
     const {status,error} = useSelector((state) => state.user)
     // use to redirect to another page
     const navigate = useNavigate()
+    const cloud_secret = process.env.REACT_APP_CLOUD_SECRET;
+    const cloud_name = process.env.REACT_APP_CLOUD_NAME;
     
     const {register,handleSubmit,watch,formState: {errors}} = useForm({resolver: yupResolver(signupSchema)});
     
@@ -19,16 +22,47 @@ function RegisterForm() {
     const [picture,setPicture] = useState()
     const [readableimage, setReadableimage] = useState('')
     
-    
+    console.log(cloud_secret)
     const onSubmit = async (data) => {
+        
+        dispatch(changeStatus("loading"))
+        if(picture){
+            // if picture is submitted upload then called the reducers to add secure url return by cloudniary to slice for picture
+           const response =  await uploadImage(picture);
+           let res = await dispatch(registerUser({...data,picture:response.secure_url}))
+           console.log(response)
+           if (res?.payload?.user) {
+            navigate("/");
+            }
+        
+        } else{
+            // if no picture set it to none 
+           let res = await dispatch(registerUser({...data, picture: ""}))
+           if (res?.payload?.user) {
+               navigate("/");
+           }
+        }
+        
+        
 
-
-
-       let res = await dispatch(registerUser({...data, picture: ""}))
-        if (res.meta.requestStatus === "fulfilled") {
-        navigate("/");
-      }
       
+    }
+
+    const uploadImage = async (picture)=>{
+        console.log('the upload function has been fired');
+        let formdata = new FormData()
+        formdata.append("upload_preset",cloud_secret)
+        formdata.append("file",picture);
+        
+        const {data} = await axios.post(
+                `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+                formdata
+        )
+        console.log(data)
+        return data
+
+       
+
     }
 
 
@@ -50,7 +84,7 @@ function RegisterForm() {
                 <AuthInput name="name" type="text" PlaceHolder="Full name" register={register} error={errors?.name?.message}/>
                 <AuthInput name="email" type="email" PlaceHolder="Email" register={register} error={errors?.email?.message}/>
                 <AuthInput name="status" type="text" PlaceHolder="Status" register={register} error={errors?.status?.message}/>
-                <AuthInput name="password" type="pass" PlaceHolder="Password" register={register} error={errors?.password?.message}/>
+                <AuthInput name="password" type="password" PlaceHolder="Password" register={register} error={errors?.password?.message}/>
 
                 <Picture  readablepicture={readableimage}  setReadableimage={setReadableimage} setPicture={setPicture}/>
            

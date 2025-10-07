@@ -33,6 +33,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    // function inside the reducers are called using dipatch, takes the old state, and action(data that is passed in when it's called)
     logout: (state) => {
       state.status = "idle";
       state.error = null;
@@ -45,6 +46,10 @@ export const userSlice = createSlice({
         token: "",
       };
     },
+    changeStatus: (state,action)=>{
+      state.status = action.payload
+
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -63,5 +68,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, changeStatus } = userSlice.actions;
 export default userSlice.reducer;
